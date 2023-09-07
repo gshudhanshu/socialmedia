@@ -1,24 +1,18 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+<head>
     <title>{% block title %}Your Website{% endblock %}</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		{% tailwind_css %}
-	</head>
-<body>
-    {% include 'header.html' %}
-
-    <nav>
-        <!-- Navigation menu goes here -->
-    </nav>
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    {% include 'footer.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% tailwind_css %}
+</head>
+<body class="flex flex-col min-h-screen">
+{% include 'header.html' %}
+<main class="flex-1 flex h-full">
+    {% block content %}{% endblock %}
+</main>
+{% include 'footer.html' %}
 </body>
 </html>
