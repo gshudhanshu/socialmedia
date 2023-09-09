@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()
     user_details = UserSerializer(source='user', read_only=True)
+    num_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
@@ -39,3 +40,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return {
             'profile_image': user_profile.profile_image.url,
         }
+
+    def get_num_comments(self, obj):
+        # Get the count of comments for the associated post
+        return Comment.objects.filter(post=obj.post).count()

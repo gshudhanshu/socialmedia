@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Prefetch
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -23,10 +23,16 @@ class ListPosts(ListView):
         queryset = Post.objects.annotate(
             num_likes=Count('like'),
             num_comments=Count('comment')
-        ).prefetch_related('comment_set')  # Prefetch comments for each post
+        )
+
+        # Use Prefetch to fetch comments and order them by creation date (desc)
+        comment_prefetch = Prefetch('comment_set', queryset=Comment.objects.order_by('-created_at'))
 
         # Use select_related to fetch user profiles
         queryset = queryset.select_related('user__userprofile')
+
+        # Add the comment prefetch
+        queryset = queryset.prefetch_related(comment_prefetch)
 
         return queryset
 
@@ -80,7 +86,7 @@ class CreateCommentAPI(ListCreateAPIView):
             serializer.validated_data['user'] = user
             serializer.validated_data['post'] = post
             self.perform_create(serializer)
-            
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "User must be authenticated to create a comment"},
