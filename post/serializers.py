@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Post, Comment, Like
 
@@ -14,7 +15,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentCreateSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
