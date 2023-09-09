@@ -7,7 +7,7 @@
                 <div class="rounded-md shadow-md md:w-full sm:w-96 dark:bg-gray-900 dark:text-gray-100">
                     <div class="flex items-center justify-between p-3">
                         <div class="flex items-center space-x-2">
-                            <img src="/media/{{ post.image }}" alt=""
+                            <img src="/media/{{ post.user.userprofile.profile_image }}" alt=""
                                  class="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                             <div class="-space-y-1">
                                 <h2 class="text-sm font-semibold leadi">{{ post.user }}</h2>
@@ -58,9 +58,9 @@
                         <div class="flex flex-wrap items-center pt-3 pb-1">
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm">Liked by
-                            <span class="font-semibold">{{ post.total_likes|default:'0' }} users </span>and
+                            <span class="font-semibold">{{ post.num_likes|default:'0' }} users </span>and
                             <span class="text-sm">Commented by </span><span
-                                            class="font-semibold">{{ post.total_comments|default:'0' }} users</span>
+                                            class="font-semibold">{{ post.num_comments|default:'0' }} users</span>
                         </span>
                             </div>
                         </div>
@@ -73,10 +73,10 @@
                                        class="w-full py-0.5 dark:bg-transparent border-none rounded text-sm pl-0 dark:text-gray-100"
                                        data-post-id="{{ post.id }}">
                             </form>
-                            <div class="space-y-3">
-                                {% for comment in post.comments %}
+                            <div class="space-y-3 comments-container">
+                                {% for comment in post.comment_set.all %}
                                     <div class="flex items-center space-x-2">
-                                        <img src="/media/{{ comment.user.profile_image }}" alt=""
+                                        <img src="/media/{{ comment.user.userprofile.profile_image }}" alt=""
                                              class="object-cover object-center w-4 h-4 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                                         <div class="-space-y-1">
 
@@ -88,8 +88,6 @@
                                                 {{ comment.content }}
                                             </span>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -114,7 +112,7 @@
             console.log('post_Id: ' + post_Id, 'comment_text: ' + comment_text);
 
 
-            axios.post('api/comment/create', {post: post_Id, content: comment_text}, {
+            axios.post('/api/comment/create', {post: post_Id, content: comment_text}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': '{{csrf_token}}'
