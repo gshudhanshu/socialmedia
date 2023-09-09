@@ -80,6 +80,7 @@ class CreateCommentAPI(ListCreateAPIView):
             serializer.validated_data['user'] = user
             serializer.validated_data['post'] = post
             self.perform_create(serializer)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "User must be authenticated to create a comment"},
