@@ -90,7 +90,7 @@
             {% endfor %}
         </div>
         <div class="min-h-48 space-y-7 hidden md:flex md:flex-col justify-start ">
-            {% include './friends_suggestions.html' %}
+            {% include './friends_suggestions.html' with friend_suggestions=friend_suggestions %}
         </div>
     </div>
 

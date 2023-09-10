@@ -1,4 +1,6 @@
 import json
+from random import sample
+
 from django.contrib.auth.models import User
 from django.db.models import Count, Prefetch, OuterRef, Exists
 from rest_framework import status
@@ -19,6 +21,14 @@ class ListPosts(LoginRequiredMixin, ListView):
     template_name = 'home/posts.html'
     context_object_name = 'posts'
 
+    def get_friend_suggestions(self, count=10):
+        all_users = User.objects.exclude(id=self.request.user.id)
+        total_users = all_users.count()
+        if total_users < count:
+            count = total_users
+        random_users = sample(list(all_users), count)
+        return random_users
+
     def get_queryset(self):
         user = self.request.user
         user_has_liked = Like.objects.filter(post=OuterRef('pk'), user=user)
@@ -27,11 +37,11 @@ class ListPosts(LoginRequiredMixin, ListView):
             num_comments=Count('comment', distinct=True),
             user_liked=Exists(user_has_liked),
         )
-
         # Use Prefetch to fetch comments and order them by creation date (desc)
         comment_prefetch = Prefetch('comment_set', queryset=Comment.objects.order_by('-created_at'))
         # Use select_related to fetch user profiles
         queryset = queryset.select_related('user__userprofile')
+
         # Add the comment prefetch
         queryset = queryset.prefetch_related(comment_prefetch)
         return queryset
@@ -39,6 +49,7 @@ class ListPosts(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
+        context['friend_suggestions'] = self.get_friend_suggestions()
         # context['user_profile'] = self.request.user.userprofile
         return context
 
