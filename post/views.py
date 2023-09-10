@@ -1,4 +1,5 @@
-from django.db.models import Count, Prefetch
+from django.contrib.auth.models import User
+from django.db.models import Count, Prefetch, Case, When, Value, BooleanField
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -21,20 +22,33 @@ class ListPosts(ListView):
     def get_queryset(self):
         # Annotate the number of likes and comments for each post
         queryset = Post.objects.annotate(
-            num_likes=Count('like'),
-            num_comments=Count('comment')
+            num_likes=Count('like', distinct=True),
+            num_comments=Count('comment', distinct=True),
+            user_liked=Case(
+                When(like__user=self.request.user, then=True),
+                default=False,
+                output_field=BooleanField(),
+            )
         )
 
         # Use Prefetch to fetch comments and order them by creation date (desc)
         comment_prefetch = Prefetch('comment_set', queryset=Comment.objects.order_by('-created_at'))
-
         # Use select_related to fetch user profiles
         queryset = queryset.select_related('user__userprofile')
-
         # Add the comment prefetch
         queryset = queryset.prefetch_related(comment_prefetch)
-
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Add additional debugging information to the context
+        context['debug_info'] = {
+            'request_user': self.request.user,
+            'queryset_count': len(context['posts']),
+        }
+
+        return context
 
 
 class CreatePostAPI(ListCreateAPIView):
