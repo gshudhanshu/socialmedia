@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="flex flex-col min-h-screen">
-{% include 'header.html' %}
+{% include 'header.html' with user=user %}
 <main class="flex-1 flex h-full">
     {% block content %}{% endblock %}
 </main>

@@ -1,12 +1,12 @@
+import json
 from django.contrib.auth.models import User
-from django.db.models import Count, Prefetch, Case, When, Value, BooleanField
-from django.shortcuts import render
+from django.db.models import Count, Prefetch, OuterRef, Exists
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny
 from django.views.generic import ListView
 from rest_framework.response import Response
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from post.models import Post, Comment, Like
 from . import serializers
@@ -14,21 +14,18 @@ from . import serializers
 
 # Create your views here.
 
-class ListPosts(ListView):
+class ListPosts(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'home/posts.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
-        # Annotate the number of likes and comments for each post
+        user = self.request.user
+        user_has_liked = Like.objects.filter(post=OuterRef('pk'), user=user)
         queryset = Post.objects.annotate(
             num_likes=Count('like', distinct=True),
             num_comments=Count('comment', distinct=True),
-            user_liked=Case(
-                When(like__user=self.request.user, then=True),
-                default=False,
-                output_field=BooleanField(),
-            )
+            user_liked=Exists(user_has_liked),
         )
 
         # Use Prefetch to fetch comments and order them by creation date (desc)
@@ -41,13 +38,8 @@ class ListPosts(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Add additional debugging information to the context
-        context['debug_info'] = {
-            'request_user': self.request.user,
-            'queryset_count': len(context['posts']),
-        }
-
+        context['user'] = self.request.user
+        # context['user_profile'] = self.request.user.userprofile
         return context
 
 

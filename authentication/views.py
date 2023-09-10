@@ -47,4 +47,6 @@ def login_view(request):
 
 
 def logout_view(request):
-    return render(request, 'auth/logout.html')
+    logout(request)
+    # Redirect to a success page.
+    return redirect('login')

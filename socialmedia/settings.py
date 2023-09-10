@@ -71,13 +71,13 @@ AUTHENTICATION_BACKENDS = [
 ROOT_URLCONF = 'socialmedia.urls'
 
 # Configure the URL where users will be redirected after logging in.
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = ''
 
 # Configure the URL where users will be redirected after logging out.
 APPEND_SLASH = False
 
 # Login redirect URL for users that are not logged in.
-LOGIN_URL = '/login/'
+LOGIN_URL = '/login'
 
 TEMPLATES = [
     {
