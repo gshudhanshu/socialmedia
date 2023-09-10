@@ -36,21 +36,6 @@ class ListPosts(ListView):
 
         return queryset
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #
-    #     # Print the data to the console for debugging
-    #     for post in context['posts']:
-    #         print(f"Post: {post.title}")
-    #         print(f"Number of Likes: {post.num_likes}")
-    #         print(f"Number of Comments: {post.num_comments}")
-    #         print(f"User Profile: {post.user.userprofile}")
-    #         print("Comments:")
-    #         for comment in post.comment_set.all():
-    #             print(f"- {comment.content}")
-    #
-    #     return context
-
 
 class CreatePostAPI(ListCreateAPIView):
     queryset = Post.objects.all()
@@ -102,3 +87,41 @@ class ListCommentsAPI(ListAPIView):
         post_id = self.kwargs.get('post_id')
         queryset = Comment.objects.filter(post_id=post_id)
         return queryset
+
+
+class LikePostAPI(CreateAPIView):
+    queryset = Like.objects.all()
+    serializer_class = serializers.LikeSerializer
+    permission_classes = (AllowAny,)
+
+    def create(self, request, *args, **kwargs):
+        # Get the authenticated user making the request
+        user = self.request.user
+
+        # Get the post id from the URL
+        post_id = kwargs.get('post_id')
+        post = get_object_or_404(Post, id=post_id)
+
+        # Ensure the user is authenticated
+        if user.is_authenticated:
+            # Check if the user has already liked the post
+            if Like.objects.filter(user=user, post=post).exists():
+                # If so, unlike the post
+                Like.objects.filter(user=user, post=post).delete()
+                num_likes = Like.objects.filter(post=post).count()
+                return Response({'post': post_id, "message": "Post unliked", 'liked': False, "num_likes": num_likes, },
+                                status=status.HTTP_200_OK)
+            else:
+                # If not, like the post
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.validated_data['user'] = user
+                serializer.validated_data['post'] = post
+                self.perform_create(serializer)
+
+                num_likes = Like.objects.filter(post=post).count()
+                return Response({'post': post_id, "message": "Post liked", 'liked': True, "num_likes": num_likes},
+                                status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "User must be authenticated to like a post"},
+                            status=status.HTTP_403_FORBIDDEN)
