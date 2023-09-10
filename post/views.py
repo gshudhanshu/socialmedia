@@ -50,8 +50,12 @@ class CreatePostAPI(ListCreateAPIView):
 
     def perform_create(self, serializer):
         # Get the authenticated user making the request
-        user = self.request.user
-
+        global user
+        user_id = self.request.data.get('user')
+        if user_id:
+            # If a user ID is provided, try to get the user or return None
+            user = get_object_or_404(User, id=user_id)
+        user = user or self.request.user
         # Set the user for the created post
         serializer.save(user=user)
 

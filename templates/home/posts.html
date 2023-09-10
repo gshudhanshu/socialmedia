@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
-    <div class="p-8 px-6 w-full flex justify-center items-center dark:bg-gray-700">
-        <div class="p-3 px-6 w-full min-h-48 max-w-3xl flex-col space-y-10 justify-center items-center">
+    <div class="py-8 px-6 w-full flex justify-center dark:bg-gray-700 gap-5 md:gap-10">
+        <div class="w-full min-h-48 max-w-screen-sm flex-col space-y-10 justify-center items-center">
             {% for post in posts %}
-                <div class="rounded-md shadow-md md:w-full sm:w-96 dark:bg-gray-900 dark:text-gray-100">
+                <div class="rounded-md shadow-md md:w-full dark:bg-gray-900 dark:text-gray-100">
                     <div class="flex items-center justify-between p-3">
                         <div class="flex items-center space-x-2">
                             <img src="/media/{{ post.user.userprofile.profile_image }}" alt=""
                                  class="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                             <div class="-space-y-1">
                                 <h2 class="text-sm font-semibold leadi">{{ post.user }}</h2>
-                                <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}
-</span>
+                                <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}</span>
                             </div>
                         </div>
 
                     </div>
                     <img src="/media/{{ post.image }}" alt=""
-                         class="object-cover object-center w-full h-72 dark:bg-gray-500">
+                         class="object-cover object-center w-full aspect-[1] dark:bg-gray-500">
                     <div class="p-3 ">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
@@ -89,6 +88,9 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="min-h-48 space-y-7 hidden md:flex md:flex-col justify-start ">
+            {% include './friends_suggestions.html' %}
         </div>
     </div>
 
