@@ -10,6 +10,7 @@ from django.views.generic import ListView
 from rest_framework.response import Response
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from friends.models import Friend
 from post.models import Post, Comment, Like
 from . import serializers
 
@@ -23,6 +24,14 @@ class ListPosts(LoginRequiredMixin, ListView):
 
     def get_friend_suggestions(self, count=10):
         all_users = User.objects.exclude(id=self.request.user.id)
+        already_sent_users = Friend.objects.filter(user=self.request.user,
+                                                   friend__in=all_users.values('id')).values_list('friend_id',
+                                                                                                  flat=True)
+        already_received_users = Friend.objects.filter(friend=self.request.user,
+                                                       user__in=all_users.values('id')).values_list('user_id',
+                                                                                                    flat=True)
+        excluded_users = set(already_sent_users) | set(already_received_users)
+        all_users = all_users.exclude(id__in=excluded_users)
         total_users = all_users.count()
         if total_users < count:
             count = total_users

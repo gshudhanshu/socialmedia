@@ -35,6 +35,8 @@ module.exports = {
         /* JS 2: Process all JavaScript files in the project. */
         // '../../**/*.js',
 
+        './node_modules/preline/dist/*.js',
+
         /**
          * Python: If you use Tailwind CSS classes in Python, uncomment the following line
          * and make sure the pattern below matches your project structure.
@@ -54,5 +56,6 @@ module.exports = {
         require('@tailwindcss/typography'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
+        require('preline/plugin'),
     ],
 }

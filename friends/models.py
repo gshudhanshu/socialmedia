@@ -21,7 +21,6 @@ class Friend(models.Model):
         Accept the friend request and create a Friend relationship.
         """
         if not self.accepted:
-            Friend.objects.create(user=self.user, friend=self.friend)
             self.accepted = True
             self.save()
 
