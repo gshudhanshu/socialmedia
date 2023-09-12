@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import serializers
-from authentication.models import UserProfile
+from userprofile.models import UserProfile
 from .models import Friend
 
 

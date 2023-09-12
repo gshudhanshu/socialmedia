@@ -3,7 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.db.transaction import commit
 
-from .models import User, UserProfile
+from django.contrib.auth.models import User
+from userprofile.models import UserProfile
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -33,15 +34,22 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
-        user.username = self.cleaned_data['username']
+        user.date_of_birth = self.cleaned_data.get('date_of_birth')
+        user.profile_image = self.files.get('profile_image')
+
         if commit:
             user.save()
-        profile, created = UserProfile.objects.get_or_create(user=user)
-        profile.first_name = self.cleaned_data['first_name']
-        profile.last_name = self.cleaned_data['last_name']
-        profile.date_of_birth = self.cleaned_data['date_of_birth']
-        profile.profile_image = self.cleaned_data['profile_image']
-        profile.save()
-
         return user
+
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     user.email = self.cleaned_data['email']
+    #     user.username = self.cleaned_data['username']
+    #     if commit:
+    #         user.save()
+    #     profile, created = UserProfile.objects.get_or_create(user=user)
+    #     profile.date_of_birth = self.cleaned_data['date_of_birth']
+    #     profile.profile_image = self.cleaned_data['profile_image']
+    #     profile.save()
+    #
+    #     return user

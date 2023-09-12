@@ -56,7 +56,7 @@ class ListFriends(ListView):
         context['user'] = self.request.user
         context['friend_requests_received'] = self.get_friend_request_received()
         context['friend_requests_sent'] = self.get_friend_requests_sent()
-        print(context['friends'])
+        print(context['friends'][0].__dict__)
         return context
 
 

@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 
 def register_view(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             # Log in the newly registered user (optional).

@@ -1,6 +1,253 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-    <h1>Home</h1>
-    <p> Welcome to the home page!</p>
+    <div class="py-8 px-6 flex-col w-full justify-center dark:bg-gray-700 gap-5 md:gap-10">
+        <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs"
+             role="tablist">
+            <button type="button"
+                    class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white dark:hs-tab-active:border-b-blue-600 relative min-w-0 flex-1 bg-white first:border-l-0 border-l border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-400 active"
+                    id="bar-with-underline-item-1" data-hs-tab="#bar-with-underline-1"
+                    aria-controls="bar-with-underline-1"
+                    role="tab">
+                Posts
+            </button>
+            <button type="button"
+                    class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white dark:hs-tab-active:border-b-blue-600 relative min-w-0 flex-1 bg-white first:border-l-0 border-l border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-400"
+                    id="bar-with-underline-item-2" data-hs-tab="#bar-with-underline-2"
+                    aria-controls="bar-with-underline-2"
+                    role="tab">
+                Friends
+            </button>
+        </nav>
+
+        <div class="mt-3">
+            <div id="bar-with-underline-1" role="tabpanel"
+                 aria-labelledby="bar-with-underline-item-1"
+                 class="grid grid-cols-1  gap-4">
+                <div class="py-8 w-full flex justify-center dark:bg-gray-700 ">
+                    <div class="w-full min-h-48 max-w-screen-sm flex-col space-y-10 justify-center items-center">
+                        {% for post in posts %}
+                            <div class="rounded-md shadow-md md:w-full dark:bg-gray-900 dark:text-gray-100">
+                                <div class="flex items-center justify-between p-3">
+                                    <div class="flex items-center space-x-2">
+                                        <img src="/media/{{ post.user.userprofile.profile_image }}" alt=""
+                                             class="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
+                                        <div class="-space-y-1">
+                                            <h2 class="text-sm font-semibold leadi">{{ post.user }}</h2>
+                                            <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <img src="/media/{{ post.image }}" alt=""
+                                     class="object-cover object-center w-full aspect-[1] dark:bg-gray-500">
+                                <div class="p-3 ">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <button type="button" title="Like post"
+                                                    class="flex items-center justify-center"
+                                                    data-post-id="{{ post.id }}" onclick="likePost(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24"
+                                                        {% if post.user_liked %}
+                                                     class="w-5 h-5 text-red-500 fill-current"
+                                                        {% else %}
+                                                     class="w-5 h-5"
+                                                        {% endif %}
+                                                     fill="none" stroke="currentColor" stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                </svg>
+                                            </button>
+                                            <button type="button" title="Add a comment"
+                                                    class="flex items-center justify-center"
+                                                    onclick="focusInput(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                     class="w-5 h-5 fill-current">
+                                                    <path d="M496,496H480a273.39,273.39,0,0,1-179.025-66.782l-16.827-14.584C274.814,415.542,265.376,416,256,416c-63.527,0-123.385-20.431-168.548-57.529C41.375,320.623,16,270.025,16,216S41.375,111.377,87.452,73.529C132.615,36.431,192.473,16,256,16S379.385,36.431,424.548,73.529C470.625,111.377,496,161.975,496,216a171.161,171.161,0,0,1-21.077,82.151,201.505,201.505,0,0,1-47.065,57.537,285.22,285.22,0,0,0,63.455,97L496,457.373ZM294.456,381.222l27.477,23.814a241.379,241.379,0,0,0,135,57.86,317.5,317.5,0,0,1-62.617-105.583v0l-4.395-12.463,9.209-7.068C440.963,305.678,464,262.429,464,216c0-92.636-93.309-168-208-168S48,123.364,48,216s93.309,168,208,168a259.114,259.114,0,0,0,31.4-1.913Z"></path>
+                                                </svg>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="flex flex-wrap items-center pt-3 pb-1">
+                                        <div class="flex items-center space-x-2">
+                                <span class="text-sm like-comment-count-container">Liked by
+                                    <span class="font-semibold num-likes">{{ post.num_likes|default:'0' }} users </span>
+                                        and
+                                    <span class="text-sm">Commented by </span>
+                                    <span class="font-semibold num-comments">{{ post.num_comments|default:'0' }} users</span>
+                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <p class="text-sm">
+                                            {{ post.content }}
+                                        </p>
+                                        <form class="comment-form" data-post-id="{{ post.id }}">
+                                            <input type="text" placeholder="Add a comment..."
+                                                   class="w-full py-0.5 dark:bg-transparent border-none rounded text-sm pl-0 dark:text-gray-100"
+                                                   data-post-id="{{ post.id }}">
+                                        </form>
+                                        <div class="space-y-3 comments-container">
+                                            {% for comment in post.comment_set.all %}
+                                                <div class="flex items-center space-x-2">
+                                                    <img src="/media/{{ comment.user.userprofile.profile_image }}"
+                                                         alt=""
+                                                         class="object-cover object-center w-4 h-4 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
+                                                    <div class="-space-y-1">
+
+                                                        <div class="-space-y-1">
+                                            <span class="text-sm font-semibold leadi">
+                                                {{ comment.user }}
+                                            </span>
+                                                            <span class="inline-block text-xs leadi dark:text-gray-400">
+                                                {{ comment.content }}
+                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+            {# Friends #}
+            <div id="bar-with-underline-2" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                 role="tabpanel"
+                 aria-labelledby="bar-with-underline-item-2">
+                {% for friend in friends %}
+                    {% with friend=friend.friend %}
+                        <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                            <img class="rounded-lg w-24 h-24 object-cover"
+                                 src="/media/{{ friend.userprofile.profile_image }}"
+                                 alt=" Image Description">
+                            <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
+                                <h3 class="font-medium text-gray-800 dark:text-gray-200">
+                                    {{ friend.first_name }} {{ friend.last_name }}
+                                </h3>
+                                <div class="flex gap-2">
+                                    <a type="button" href="{% url 'friend-profile-detail' friend.id %}"
+                                       data-friend-id="{{ friend.id }}"
+                                       class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
+                                        Profile
+                                    </a>
+                                    <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                            data-friend-id="{{ friend.friend_id }}" data-link-id="{{ friend.id }}"
+                                            data-request-type="remove"
+                                            class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
+                                        Remove Friend
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var csrf_token = '{{ csrf_token }}';
+    </script>
+
+    <script src="{% static 'js/friends.js' %}"></script>
+    <script src="{% static 'js/posts.js' %}"></script>
+
+    {# Javascript code for comment #}
+    {#    <script>#}
+    {#        // JavaScript code to handle form submission#}
+    {#        document.querySelectorAll('.comment-form').forEach(formContainer => {#}
+    {#            formContainer.addEventListener('submit', function (e) {#}
+    {#                e.preventDefault(); // Prevent the default form submission#}
+    {##}
+    {#                const post_id = this.getAttribute('data-post-id');#}
+    {#                let commentInput = this.querySelector("input"); // Get the input field#}
+    {#                let comment_text = commentInput.value;#}
+    {#                console.log('post_Id: ' + post_id, 'comment_text: ' + comment_text);#}
+    {#                axiosPostRequest(post_id, comment_text, commentInput, formContainer)#}
+    {#            })#}
+    {#        });#}
+    {##}
+    {#        function axiosPostRequest(post_Id, comment_text, commentInput, formContainer) {#}
+    {#            axios.post('/api/comment/create', {post: post_Id, content: comment_text}, {#}
+    {#                headers: {#}
+    {#                    'Content-Type': 'application/json',#}
+    {#                    'X-CSRFToken': '{{ csrf_token }}'#}
+    {#                }#}
+    {#            })#}
+    {#                .then(response => {#}
+    {#                    // Handle the response, e.g., display the new comment#}
+    {#                    console.log('New Comment:', response.data);#}
+    {##}
+    {#                    // Append the new comment to the comments container at the beginning#}
+    {#const commentsContainer = document.querySelector('.comments-container');#}
+    {#                    const commentsContainer = formContainer.parentElement.querySelector('.comments-container');#}
+    {#                    const newCommentHTML = `#}
+    {#                    <div class="flex items-center space-x-2">#}
+    {#                        <img src="${response.data.user_profile.profile_image}" alt=""#}
+    {#                            class="object-cover object-center w-4 h-4 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">#}
+    {#                        <div class="-space-y-1">#}
+    {#                            <div class="-space-y-1">#}
+    {#                                <span class="text-sm font-semibold leadi">#}
+    {#                                    ${response.data.user_details.username}#}
+    {#                                </span>#}
+    {#                                <span class="inline-block text-xs leadi dark:text-gray-400">#}
+    {#                                    ${response.data.content}#}
+    {#                                </span>#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                `;#}
+    {#                    commentsContainer.insertAdjacentHTML('afterbegin', newCommentHTML);#}
+    {#document.querySelector('.num-comments').innerHTML = response.data.num_comments + ' users';#}
+    {#                    formContainer.parentElement.parentElement.querySelector('.num-comments').innerHTML = response.data.num_comments + ' users'#}
+    {##}
+    {#                    // Clear the input field value#}
+    {#                    commentInput.value = '';#}
+    {#                })#}
+    {#                .catch(error => {#}
+    {#                    console.error('Error creating comment:', error);#}
+    {#                });#}
+    {#        }#}
+    {##}
+    {#    Auto focus input when comment button is clicked #}
+    {##}
+    {#        function focusInput(button) {#}
+    {#            button.parentElement.parentElement.parentElement.querySelector('.comment-form').querySelector('input').focus();#}
+    {#        }#}
+    {##}
+    {#        function likePost(button) {#}
+    {#            const post_id = button.getAttribute('data-post-id');#}
+    {#            axios.post(`/api/like/${post_id}`, {post: post_id}, {#}
+    {#                headers: {#}
+    {#                    'Content-Type': 'application/json',#}
+    {#                    'X-CSRFToken': '{{ csrf_token }}'#}
+    {#                }#}
+    {#            }).then(response => {#}
+    {#                console.log(response.data);#}
+    {#                if (response.data.liked) {#}
+    {#                    button.querySelector('svg').classList.add('text-red-500');#}
+    {#                    button.querySelector('svg').classList.add('fill-current');#}
+    {#                } else {#}
+    {#                    button.querySelector('svg').classList.remove('text-red-500');#}
+    {#                    button.querySelector('svg').classList.remove('fill-current');#}
+    {#                }#}
+    {#                button.parentElement.parentElement.parentElement.querySelector('.num-likes').innerHTML = response.data.num_likes + ' users';#}
+    {#            }).catch(error => {#}
+    {#                console.error('Error liking post:', error);#}
+    {#            });#}
+    {#        }#}
+    {##}
+    {#    </script>#}
+
+
 {% endblock %}
