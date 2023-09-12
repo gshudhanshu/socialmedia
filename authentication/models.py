@@ -7,6 +7,8 @@ from django.dispatch import receiver
 # Create your models here.
 
 class UserProfile(models.Model):
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth = models.DateField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile', default='profile/default.jpg',
