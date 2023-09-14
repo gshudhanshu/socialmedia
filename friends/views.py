@@ -56,11 +56,11 @@ class ListFriends(ListView):
         context['user'] = self.request.user
         context['friend_requests_received'] = self.get_friend_request_received()
         context['friend_requests_sent'] = self.get_friend_requests_sent()
-        print(context['friends'][0].__dict__)
+        print(context['friend_requests_sent'][0].__dict__)
         return context
 
 
-class AcceptOrDeclineCancelFriendAPI(RetrieveUpdateDestroyAPIView):
+class AcceptOrDeclineCancelRemoveFriendAPI(RetrieveUpdateDestroyAPIView):
     queryset = Friend.objects.all()
     serializer_class = serializers.FriendRequestSerializer
     permission_classes = (AllowAny,)
@@ -71,10 +71,11 @@ class AcceptOrDeclineCancelFriendAPI(RetrieveUpdateDestroyAPIView):
         else:
             user = self.request.user
         friend = get_object_or_404(User, id=self.request.data.get('friend_id'))
-        if self.request.data.get('request_type') == 'cancel':
-            friend_request = get_object_or_404(Friend, user=user, friend=friend)
-        else:
-            friend_request = get_object_or_404(Friend, user=friend, friend=user)
+        # if self.request.data.get('request_type') == 'cancel':
+        #     friend_request = get_object_or_404(Friend, user=user, friend=friend)
+        # else:
+        #     friend_request = get_object_or_404(Friend, user=friend, friend=user)
+        friend_request = get_object_or_404(Friend, id=self.request.data.get('friend_link_id'))
         return friend_request
 
     def update(self, request, *args, **kwargs):
@@ -95,4 +96,26 @@ class AcceptOrDeclineCancelFriendAPI(RetrieveUpdateDestroyAPIView):
             result = serializer.decline_request()
         elif self.request.data.get('request_type') == 'cancel':
             result = serializer.cancel_request()
+        elif self.request.data.get('request_type') == 'remove':
+            result = serializer.remove_friend()
         return Response(result, status=200)
+
+
+class SearchUsers(ListView):
+    model = User
+    template_name = 'friends/search-users.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        #     get all users excluding logged in user and users who have sent or received friend requests
+        queryset = User.objects.exclude(id=self.request.user.id)
+        if self.request.GET.get('search'):
+            search = self.request.GET.get('search')
+            queryset = queryset.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(
+                last_name__icontains=search))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

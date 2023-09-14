@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="py-8 px-6 flex-col w-full justify-center dark:bg-gray-700 gap-5 md:gap-10 ">
+        <div class="w-full flex-col mx-auto md:flex md:items-center md:justify-between container">
+            <h1 class="my-2 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+                Search Result
+            </h1>
+            <div class="mt-3">
+                <div id="bar-with-underline-1" role="tabpanel"
+                     aria-labelledby="bar-with-underline-item-1"
+                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for friend in users %}
+                        <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                            <img class="rounded-lg w-24 h-24 object-cover"
+                                 src="/media/{{ friend.userprofile.profile_image }}"
+                                 alt=" Image Description">
+                            <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
+                                <h3 class="font-medium text-gray-800 dark:text-gray-200">
+                                    {{ friend.first_name }} {{ friend.last_name }}
+                                </h3>
+                                <div class="flex gap-2">
+
+                                    {#                                    <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"#}
+                                    {#                                            class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">#}
+                                    {#                                        Add friend#}
+                                    {#                                    </button>#}
+                                    <a type="button" href="{% url 'friend-profile-detail' friend.id %}"
+                                       class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                        Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

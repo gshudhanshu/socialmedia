@@ -37,3 +37,10 @@ class Friend(models.Model):
         """
         if not self.accepted:
             self.delete()
+
+    def remove(self):
+        """
+        Remove the friend.
+        """
+        if self.accepted:
+            self.delete()

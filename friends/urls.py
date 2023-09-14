@@ -4,10 +4,7 @@ from . import views
 
 urlpatterns = [
     path('friends', views.ListFriends.as_view(), name='friends'),
+    path('search', views.SearchUsers.as_view(), name='search-users'),
     path('api/friends/add-friend', views.AddFriendAPI.as_view(), name='add-friend'),
-    path('api/friends/accept-decline-cancel', views.AcceptOrDeclineCancelFriendAPI.as_view(),
-         name='accept-decline-cancel'),
-    # path('/friends/accept-friend', views.AcceptFriend.as_view(), name='accept-friend'),
-    # path('/friends/decline-friend', views.DeclineFriend.as_view(), name='decline-friend'),
-    # path('/friends/remove-friend', views.RemoveFriend.as_view(), name='remove-friend'),
-]
+    path('api/friends/accept-decline-cancel-remove', views.AcceptOrDeclineCancelRemoveFriendAPI.as_view(),
+         name='accept-decline-cancel-remove'), ]

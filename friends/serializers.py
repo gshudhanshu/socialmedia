@@ -76,3 +76,17 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         else:
             return {'message': 'Friend request does not exist.',
                     'request_cancelled': False, **self.data}
+
+    def remove_friend(self):
+        user = self.validated_data['user']
+        friend = self.validated_data['friend']
+
+        # Check if a friend request exists
+        friend_request = Friend.objects.filter(id=self.data['id']).first()
+        if friend_request:
+            friend_request.remove()
+            return {'message': 'Friend removed.',
+                    'friend_removed': True, **self.data}
+        else:
+            return {'message': 'Friend request does not exist.',
+                    'friend_removed': False, **self.data}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <div class="py-8 px-6 flex-col w-full justify-center dark:bg-gray-700 gap-5 md:gap-10">
         <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs"
@@ -40,10 +41,17 @@
                             <h3 class="font-medium text-gray-800 dark:text-gray-200">
                                 {{ friend.first_name }} {{ friend.last_name }}
                             </h3>
-                            <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"
-                                    class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
-                                Add friend
-                            </button>
+                            <div class="flex gap-2">
+
+                                <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"
+                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Add friend
+                                </button>
+                                <a type="button" href="{% url 'friend-profile-detail' friend.id %}"
+                                   class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Profile
+                                </a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -52,121 +60,72 @@
                  role="tabpanel"
                  aria-labelledby="bar-with-underline-item-2">
                 {% for friend in friend_requests_received %}
-                    {% with friend=friend.user %}
-                        <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
-                            <img class="rounded-lg w-24 h-24 object-cover"
-                                 src="/media/{{ friend.userprofile.profile_image }}"
-                                 alt=" Image Description">
-                            <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
-                                <h3 class="font-medium text-gray-800 dark:text-gray-200">
-                                    {{ friend.first_name }} {{ friend.last_name }}
-                                </h3>
-                                <div class="flex gap-2">
-                                    <button type="button" onclick="friend_request_accept_decline_cancel(this)"
-                                            data-friend-id="{{ friend.id }}" data-request-type="accept"
-                                            class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
-                                        Accept
-                                    </button>
-                                    <button type="button" onclick="friend_request_accept_decline_cancel(this)"
-                                            data-friend-id="{{ friend.id }}" data-request-type="decline"
-                                            class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
-                                        Decline
-                                    </button>
-                                </div>
+                    <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                        <img class="rounded-lg w-24 h-24 object-cover"
+                             src="/media/{{ friend.user.userprofile.profile_image }}"
+                             alt=" Image Description">
+                        <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">
+                                {{ friend.user.first_name }} {{ friend.user.last_name }}
+                            </h3>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                        data-friend-id="{{ friend.user.id }}" data-friend-link-id="{{ friend.id }}"
+                                        data-request-type="accept"
+                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Accept
+                                </button>
+                                <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                        data-friend-id="{{ friend.user.id }}" data-friend-link-id="{{ friend.id }}"
+                                        data-request-type="decline"
+                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Decline
+                                </button>
+                                <a type="button" href="{% url 'friend-profile-detail' friend.user.id %}"
+                                   class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Profile
+                                </a>
                             </div>
                         </div>
-                    {% endwith %}
+                    </div>
                 {% endfor %}
             </div>
             <div id="bar-with-underline-3" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                  role="tabpanel"
                  aria-labelledby="bar-with-underline-item-3">
                 {% for friend in friend_requests_sent %}
-                    {% with friend=friend.friend %}
-                        <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
-                            <img class="rounded-lg w-24 h-24 object-cover"
-                                 src="/media/{{ friend.userprofile.profile_image }}"
-                                 alt=" Image Description">
-                            <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
-                                <h3 class="font-medium text-gray-800 dark:text-gray-200">
-                                    {{ friend.first_name }} {{ friend.last_name }}
-                                </h3>
-                                <button type="button" onclick="friend_request_accept_decline_cancel(this)"
-                                        data-friend-id="{{ friend.id }}" data-request-type="cancel"
-                                        class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
+                    <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                        <img class="rounded-lg w-24 h-24 object-cover"
+                             src="/media/{{ friend.friend.userprofile.profile_image }}"
+                             alt=" Image Description">
+                        <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">
+                                {{ friend.friend.first_name }} {{ friend.friend.last_name }}
+                            </h3>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                        data-friend-id="{{ friend.friend.id }}" data-friend-link-id="{{ friend.id }}"
+                                        data-request-type="cancel"
+                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
                                     Cancel
                                 </button>
+                                <a type="button" href="{% url 'friend-profile-detail' friend.friend.id %}"
+                                   class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                    Profile
+                                </a>
                             </div>
                         </div>
-                    {% endwith %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
-
     </div>
 
     <script>
         var csrf_token = '{{ csrf_token }}';
     </script>
 
-    <script>
-        function add_friend(button) {
-            const friend_id = button.getAttribute('data-friend-id')
-            axios.post('/api/friends/add-friend', {
-                friend_id: friend_id
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-                .then(function (response) {
-                    console.log(response);
-                    button.innerHTML = 'Sent'
-                    button.disabled = true
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    if (error.response.data.request_sent_or_exist) {
-                        button.innerHTML = 'Already Exists'
-                        button.disabled = true
-                    } else if (error.response.data.request_sent_or_exist === false) {
-                        button.parentElement.parentElement.remove()
-                    }
-                });
-        }
+    <script src="{% static 'js/friends.js' %}"></script>
 
-        function friend_request_accept_decline_cancel(button) {
-            const friend_id = button.getAttribute('data-friend-id')
-            const data_request_type = button.getAttribute('data-request-type')
-            axios.put('/api/friends/accept-decline-cancel', {
-                friend_id: friend_id,
-                request_type: data_request_type
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-                .then(function (response) {
-                    console.log(response);
-                    if (data_request_type === 'accept') {
-                        button.innerHTML = 'Accepted'
-                        button.disabled = true
-                        button.nextElementSibling.remove()
-                    } else if (data_request_type === 'decline') {
-                        button.innerHTML = 'Declined'
-                        button.disabled = true
-                        button.previousElementSibling.remove()
-                    } else if (data_request_type === 'cancel') {
-                        button.innerHTML = 'Cancelled'
-                    }
-                    button.disabled = true
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-    </script>
 
 {% endblock %}

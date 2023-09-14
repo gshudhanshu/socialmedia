@@ -10,10 +10,16 @@
             <h3 class="font-medium text-gray-800 dark:text-gray-200">
                 {{ friend.first_name }} {{ friend.last_name }}
             </h3>
-            <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"
-                    class="block p-2 text-center rounded-sm dark:text-gray-900 dark:bg-violet-400 disabled:bg-gray-300">
-                Add friend
-            </button>
+            <div class="flex gap-2">
+                <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"
+                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                    Add friend
+                </button>
+                <a type="button" href="{% url 'friend-profile-detail' friend.id %}" data-friend-id="{{ friend.id }}"
+                   class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                    Profile
+                </a>
+            </div>
         </div>
     </div>
 {% endfor %}
