@@ -26,8 +26,8 @@ urlpatterns = [
     path('', include('authentication.urls')),
     path('', include('post.urls')),
     path('', include('friends.urls')),
-    path('', include('chat.urls')),
     path('', include('userprofile.urls')),
+    path('', include('chat.urls')),
 ]
 
 urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
