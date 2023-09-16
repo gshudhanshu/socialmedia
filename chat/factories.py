@@ -6,7 +6,7 @@ class ChatRoomFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ChatRoom
 
-    name = factory.Faker('name')
+    name = factory.Faker('word')
 
 
 class ChatMessageFactory(factory.django.DjangoModelFactory):
