@@ -22,17 +22,20 @@ class PostViewTestCase(APITestCase):
         url = reverse('api-post', args=[self.post.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['title'], self.post.title)
+        self.assertEqual(response.data['content'], self.post.content)
         # Add more assertions to test the response content as needed
 
     def test_list_post_comments(self):
         url = reverse('api-post-comments', args=[self.post.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Add more assertions to test the response content as needed
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['content'], self.comment.content)
+        self.assertEqual(response.data[0]['user'], self.comment.user.id)
 
     def test_like_post(self):
         url = reverse('api-like-post', args=[self.post.id])
         data = {'user': self.user1.id, 'post': self.post.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Add more assertions to test the response content as needed

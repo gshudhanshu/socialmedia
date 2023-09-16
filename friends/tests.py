@@ -21,7 +21,6 @@ class FriendModelTest(APITestCase):
 
     def test_friend_decline(self):
         friend_request = FriendFactory(user=self.user1, friend=self.user2, accepted=False)
-
         self.assertFalse(friend_request.accepted)
         friend_request.decline()
         self.assertIsNone(Friend.objects.filter(id=friend_request.id).first())
@@ -40,6 +39,8 @@ class FriendAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user'], self.user1.id)
+        self.assertEqual(response.data[0]['friend'], self.user2.id)
 
     def test_list_friend_requests_received(self):
         friend_request = FriendFactory(user=self.user1, friend=self.user2, accepted=False)
@@ -49,6 +50,8 @@ class FriendAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user'], self.user1.id)
+        self.assertEqual(response.data[0]['friend'], self.user2.id)
 
     def test_list_friend_requests_sent(self):
         friend_request = FriendFactory(user=self.user1, friend=self.user2, accepted=False)
@@ -58,3 +61,5 @@ class FriendAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['friend'], self.user2.id)
+        self.assertEqual(response.data[0]['user'], self.user1.id)

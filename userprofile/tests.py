@@ -26,6 +26,9 @@ class UserProfileViewTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], user_profile.username)
+        self.assertEqual(response.data['email'], user_profile.email)
+        self.assertEqual(response.data['first_name'], user_profile.first_name)
+        self.assertEqual(response.data['last_name'], user_profile.last_name)
 
     def test_view_profile_not_found(self):
         non_existent_user_id = 999999

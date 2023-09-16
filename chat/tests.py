@@ -40,17 +40,17 @@ class ChatMessageAPITest(APITestCase):
         self.chatroom_data = ChatRoomFactory()
         self.chatmessage_data = ChatMessageFactory(room_name=self.chatroom_data, user=self.user)
 
-    def tearDown(self):
-        pass
-
     def test_create_chatmessage(self):
         chatmessage_data = ChatMessageSerializer(self.chatmessage_data).data  # Serialize the ChatMessage instance
         response = self.client.post(self.url, chatmessage_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ChatMessage.objects.count(), 2)  # Check if a new chat message was created
         self.assertEqual(response.data['message'], chatmessage_data['message'])
+        self.assertEqual(response.data['user'], chatmessage_data['user'])
 
     def test_list_chatmessages(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ChatMessage.objects.count(), 1)
+        self.assertEqual(response.data[0]['message'], self.chatmessage_data.message)
+        self.assertEqual(response.data[0]['user'], self.chatmessage_data.user.id)
