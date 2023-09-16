@@ -5,13 +5,14 @@ from django.urls import reverse
 from .models import *
 from .serializers import *
 from .factories import *
+from authentication.factories import UserFactory
 
 
 # Create your tests here.
 class ChatRoomAPITest(APITestCase):
     def setUp(self):
         self.url = reverse('api-chat-view')
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = UserFactory()
         self.chatroom_data = ChatRoomFactory()
 
     def tearDown(self):
@@ -35,7 +36,7 @@ class ChatRoomAPITest(APITestCase):
 class ChatMessageAPITest(APITestCase):
     def setUp(self):
         self.url = reverse('api-chat-room-view', args=['test'])
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = UserFactory()
         self.chatroom_data = ChatRoomFactory()
         self.chatmessage_data = ChatMessageFactory(room_name=self.chatroom_data, user=self.user)
 

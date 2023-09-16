@@ -6,7 +6,7 @@ function saveStatus(button) {
     const closeButton = document.getElementById("status-message-close-button");
 
 
-    axios.put('/api/profile/status', {
+    axios.put('/profile/status', {
         status_message: status_input.value
     }, {
         headers: {

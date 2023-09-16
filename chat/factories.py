@@ -1,5 +1,6 @@
 import factory
 from .models import ChatRoom, ChatMessage
+from authentication.factories import UserFactory
 
 
 class ChatRoomFactory(factory.django.DjangoModelFactory):
@@ -14,5 +15,5 @@ class ChatMessageFactory(factory.django.DjangoModelFactory):
         model = ChatMessage
 
     room_name = factory.SubFactory(ChatRoomFactory)
-    user = factory.Faker('word')
+    user = factory.SubFactory(UserFactory)
     message = factory.Faker('sentence')

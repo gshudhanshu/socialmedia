@@ -6,6 +6,10 @@ from .models import Post, Comment, Like
 
 
 class PostSerializer(serializers.ModelSerializer):
+    num_likes = serializers.IntegerField(read_only=True)
+    num_comments = serializers.IntegerField(read_only=True)
+    user_liked = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = Post
         fields = '__all__'
@@ -27,12 +31,13 @@ class CommentSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()
     user_details = UserSerializer(source='user', read_only=True)
     num_comments = serializers.SerializerMethodField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Comment
-        # fields = '__all__'
-        read_only_fields = ('user',)
-        exclude = ('user',)
+        fields = '__all__'
+        # read_only_fields = ('user',)
+        # exclude = ('user',)
 
     def get_user_profile(self, obj):
         user = obj.user
@@ -53,3 +58,21 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = '__all__'
         read_only_fields = ('user',)
+
+
+# REST API
+
+class CommentAllUsersSerializer(CommentSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class LikeAllUsersSerializer(LikeSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Like
+        fields = '__all__'
