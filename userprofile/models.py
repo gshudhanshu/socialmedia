@@ -32,6 +32,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 # Use a signal to save the UserProfile when the User is saved
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.date_of_birth = instance.date_of_birth
-    instance.userprofile.profile_image = instance.profile_image
-    instance.userprofile.save()
+    if hasattr(instance, 'date_of_birth') and hasattr(instance, 'profile_image'):
+        instance.userprofile.date_of_birth = instance.date_of_birth
+        instance.userprofile.profile_image = instance.profile_image
+        instance.userprofile.save()
