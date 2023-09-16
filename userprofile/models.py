@@ -24,9 +24,12 @@ class UserProfile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance,
-                                   date_of_birth=instance.date_of_birth,
-                                   profile_image=instance.profile_image)
+        if hasattr(instance, 'date_of_birth') and hasattr(instance, 'profile_image'):
+            UserProfile.objects.create(user=instance,
+                                       date_of_birth=instance.date_of_birth,
+                                       profile_image=instance.profile_image)
+        else:
+            UserProfile.objects.create(user=instance)
 
 
 # Use a signal to save the UserProfile when the User is saved

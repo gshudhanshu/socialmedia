@@ -11,18 +11,22 @@ class ChatView(ListView):
     template_name = 'chat/chat.html'
     context_object_name = 'rooms'
 
-    def get_queryset(self):
-        return ChatRoom.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rooms'] = ChatRoom.objects.all()
+        return context
 
 
 # Create class for chat room view
 class ChatRoomView(ListView):
     template_name = 'chat/room.html'
-    context_object_name = 'room'
 
-    def get_queryset(self):
-        queryset = ChatRoom.objects.get_or_create(name=self.kwargs['room_name'])
-        return queryset[0]
+    def get_context_data(self, **kwargs):
+        room_name = kwargs['room_name']
+        chat_room, created = ChatRoom.objects.get_or_create(name=room_name)
+        context = super().get_context_data(**kwargs)
+        context['room'] = chat_room
+        return context
 
 
 def index_view(request):
