@@ -2,8 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# Create your models here.
-
+# I wrote this code
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -32,3 +31,5 @@ class Like(models.Model):
 
     def __str__(self):
         return self.user.username + " likes " + self.post.title
+
+# end of code I wrote

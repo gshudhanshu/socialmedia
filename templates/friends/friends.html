@@ -1,7 +1,9 @@
+{# I wrote this code #}
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
     <div class="py-8 px-6 flex-col w-full justify-center dark:bg-gray-700 gap-5 md:gap-10">
+        {# Tabs for navigating between friend suggestions, received requests, and sent requests #}
         <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs"
              role="tablist">
             <button type="button"
@@ -26,11 +28,12 @@
                 Friend Requests Sent
             </button>
         </nav>
-
+        {# Friend suggestions tab #}
         <div class="mt-3">
             <div id="bar-with-underline-1" role="tabpanel"
                  aria-labelledby="bar-with-underline-item-1"
                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {# Loop through friend suggestions #}
                 {% for friend in friends %}
 
                     <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
@@ -41,8 +44,8 @@
                             <h3 class="font-medium text-gray-800 dark:text-gray-200">
                                 {{ friend.first_name }} {{ friend.last_name }}
                             </h3>
+                            {# Button to add a friend and link to the friend's profile #}
                             <div class="flex gap-2">
-
                                 <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"
                                         class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
                                     Add friend
@@ -56,6 +59,7 @@
                     </div>
                 {% endfor %}
             </div>
+            {# Friend requests received tab #}
             <div id="bar-with-underline-2" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                  role="tabpanel"
                  aria-labelledby="bar-with-underline-item-2">
@@ -90,6 +94,7 @@
                     </div>
                 {% endfor %}
             </div>
+            {# Friend requests sent tab #}
             <div id="bar-with-underline-3" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                  role="tabpanel"
                  aria-labelledby="bar-with-underline-item-3">
@@ -103,6 +108,9 @@
                                 {{ friend.friend.first_name }} {{ friend.friend.last_name }}
                             </h3>
                             <div class="flex gap-2">
+
+                                {# Button to cancel a friend request and link to the friend's profile #}
+
                                 <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
                                         data-friend-id="{{ friend.friend.id }}" data-friend-link-id="{{ friend.id }}"
                                         data-request-type="cancel"
@@ -121,11 +129,14 @@
         </div>
     </div>
 
+    {# Global csrf_token variable to access from other javascript files #}
     <script>
         var csrf_token = '{{ csrf_token }}';
     </script>
-
+    {# Include JavaScript for friend functionality #}
     <script src="{% static 'js/friends.js' %}"></script>
 
 
 {% endblock %}
+
+{# end of code I wrote #}

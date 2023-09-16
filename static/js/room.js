@@ -1,21 +1,30 @@
+// I have taken the reference from
+// https://testdriven.io/blog/django-channels/ tutorial
+// modified the code to fit my needs
+
+// Get the room name from the template
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
 const chatLog = document.querySelector("#chatLog");
 const chatMessageInput = document.querySelector("#chatMessageInput");
 const chatMessageSend = document.querySelector("#chatMessageSend");
 const onlineUsersSelector = document.querySelector("#onlineUsersSelector");
 
+// focus input field
 chatMessageInput.focus();
 
+// Listen for enter key press
 chatMessageInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         sendMessage();
     }
 });
 
+// Listen for send button click
 chatMessageSend.addEventListener('click', sendMessage);
 
 let chatSocket = null;
 
+// Connect to the WebSocket
 function connect() {
     chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomName}/`);
 
@@ -68,6 +77,7 @@ function connect() {
     }
 }
 
+// Send a message through the WebSocket
 function sendMessage() {
     if (chatMessageInput.value.length === 0) return;
     chatSocket.send(JSON.stringify({
@@ -76,6 +86,7 @@ function sendMessage() {
     chatMessageInput.value = "";
 }
 
+// Add a user to the online users selector
 function onlineUsersSelectorAdd(value) {
     if (!document.querySelector(`option[value='${value}']`)) {
         const newOption = document.createElement("option");
@@ -85,17 +96,21 @@ function onlineUsersSelectorAdd(value) {
     }
 }
 
+// Remove a user from the online users selector
 function onlineUsersSelectorRemove(value) {
     const oldOption = document.querySelector(`option[value='${value}']`);
     if (oldOption !== null) oldOption.remove();
 }
 
+// Append a message to the chat log
 function appendMessage(message) {
     chatLog.value += `${message}\n`;
 }
 
 connect();
 
+// Add event listener to the online users selector
+// When the user selects a user from the online users selector add the username to the chat input field
 onlineUsersSelector.addEventListener('change', () => {
     chatMessageInput.value = `@${onlineUsersSelector.value} `;
     onlineUsersSelector.value = null;

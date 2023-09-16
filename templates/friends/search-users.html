@@ -1,3 +1,4 @@
+{# I wrote this code #}
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
@@ -21,11 +22,7 @@
                                     {{ friend.first_name }} {{ friend.last_name }}
                                 </h3>
                                 <div class="flex gap-2">
-
-                                    {#                                    <button type="button" onclick="add_friend(this)" data-friend-id="{{ friend.id }}"#}
-                                    {#                                            class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">#}
-                                    {#                                        Add friend#}
-                                    {#                                    </button>#}
+                                    {# Link to the friend's profile #}
                                     <a type="button" href="{% url 'friend-profile-detail' friend.id %}"
                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
                                         Profile
@@ -39,3 +36,5 @@
         </div>
     </div>
 {% endblock %}
+
+{# end of code I wrote #}

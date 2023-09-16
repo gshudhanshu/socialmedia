@@ -1,12 +1,10 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-
-from .models import *
-from .serializers import *
 from .factories import *
 
 
+# I wrote this code
 class PostViewTestCase(APITestCase):
     def setUp(self):
         # Create test users
@@ -24,7 +22,6 @@ class PostViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], self.post.title)
         self.assertEqual(response.data['content'], self.post.content)
-        # Add more assertions to test the response content as needed
 
     def test_list_post_comments(self):
         url = reverse('api-post-comments', args=[self.post.id])
@@ -39,3 +36,5 @@ class PostViewTestCase(APITestCase):
         data = {'user': self.user1.id, 'post': self.post.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+# I wrote this code

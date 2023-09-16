@@ -1,11 +1,9 @@
 from django.contrib.auth.models import User
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework import serializers
-from userprofile.models import UserProfile
 from .models import Friend
 
 
+# I wrote this code
 class FriendRequestSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
     friend = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
@@ -19,6 +17,7 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         user = self.validated_data['user']
         friend = self.validated_data['friend']
 
+        # Check if user is sending a friend request to himself
         if user == friend:
             raise serializers.ValidationError(
                 {'message': 'You cannot send a friend request to yourself.', 'request_sent_or_exist': False,
@@ -27,6 +26,8 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         request_exists = Friend.objects.filter(user=user, friend=friend).exists()
         reverse_request_exists = Friend.objects.filter(user=friend, friend=user).exists()
 
+        # Check if a friend request already exists from both sides
+        # If a friend request already exists, raise a validation error
         if request_exists or reverse_request_exists:
             raise serializers.ValidationError(
                 {'message': 'Friend request already exists.', 'request_sent_or_exist': True, 'user': user,
@@ -92,8 +93,10 @@ class FriendRequestSerializer(serializers.ModelSerializer):
                     'friend_removed': False, **self.data}
 
 
-#  REST API Views
+#  REST API Views serializers
 class ListFriendsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Friend
         fields = "__all__"
+
+# end of code I wrote

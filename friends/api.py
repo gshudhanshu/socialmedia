@@ -5,6 +5,7 @@ from .models import *
 from .serializers import *
 
 
+# I wrote this code
 class ListFriends(ListCreateAPIView):
     serializer_class = ListFriendsSerializer
 
@@ -27,3 +28,5 @@ class ListFriendRequestsSent(ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Friend.objects.filter(user=user_id, accepted=False)
+
+# end of code I wrote

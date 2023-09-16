@@ -3,6 +3,7 @@ from django.db import models
 from django.http import JsonResponse
 
 
+# I wrote this code
 class Friend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_friend_request')
     friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_friend_request')
@@ -13,34 +14,25 @@ class Friend(models.Model):
     def __str__(self):
         return f"{self.user.username} -> {self.friend.username}"
 
-    # class Meta:
-    #     unique_together = ('user', 'friend')
-
+    # Accept the friend request and create a Friend relationship.
     def accept(self):
-        """
-        Accept the friend request and create a Friend relationship.
-        """
         if not self.accepted:
             self.accepted = True
             self.save()
 
+    # Decline the friend request.
     def decline(self):
-        """
-        Decline the friend request.
-        """
         if not self.accepted:
             self.delete()
 
+    # Cancel the sent friend request.
     def cancel(self):
-        """
-        Cancel the sent friend request.
-        """
         if not self.accepted:
             self.delete()
 
+    # Remove the friend.
     def remove(self):
-        """
-        Remove the friend.
-        """
         if self.accepted:
             self.delete()
+
+# end of code I wrote

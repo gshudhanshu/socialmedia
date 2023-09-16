@@ -4,6 +4,7 @@ from .models import *
 from authentication.factories import UserFactory
 
 
+# I wrote this code
 class PostFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Post
@@ -29,3 +30,5 @@ class LikeFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     post = factory.SubFactory(PostFactory)
+
+# end of code I wrote

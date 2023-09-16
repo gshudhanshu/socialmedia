@@ -1,8 +1,10 @@
+{# I wrote this code #}
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% block content %}
     <div class="py-8 px-6 w-full flex justify-center dark:bg-gray-700 gap-5 md:gap-10">
+        {# Posts block #}
         <div class="w-full min-h-48 max-w-screen-sm flex-col space-y-10 justify-center items-center">
             {% for post in posts %}
                 <div class="rounded-md shadow-md md:w-full dark:bg-gray-900 dark:text-gray-100">
@@ -46,6 +48,7 @@
                             </div>
 
                         </div>
+                        {# post description and comments, like count block#}
                         <div class="flex flex-wrap items-center pt-3 pb-1">
                             <div class="flex items-center space-x-2">
                                 <span class="like-comment-count-container">Liked by
@@ -65,6 +68,7 @@
                                        class="w-full py-0.5 dark:bg-transparent border-none rounded pl-0 dark:text-gray-100"
                                        data-post-id="{{ post.id }}">
                             </form>
+                            {# comments block #}
                             <div class="space-y-3 comments-container">
                                 {% for comment in post.comment_set.all %}
                                     <div class="flex items-center space-x-2">
@@ -90,6 +94,7 @@
                 </div>
             {% endfor %}
         </div>
+        {# Friends suggestions block #}
         <div class="min-h-48 space-y-7 hidden md:flex md:flex-col justify-start ">
             {% include './friends_suggestions.html' with friend_suggestions=friend_suggestions %}
         </div>
@@ -100,3 +105,5 @@
     </script>
     <script src="{% static 'js/posts.js' %}"></script>
 {% endblock %}
+
+{# end of code I wrote #}

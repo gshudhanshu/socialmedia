@@ -1,3 +1,4 @@
+{# I wrote this code #}
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
@@ -15,7 +16,7 @@
                     </div>
                 </div>
             {% endif %}
-
+            {# Display form #}
             <form method="post" action="{% url 'register' %}" class="space-y-6" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in form %}
@@ -31,6 +32,7 @@
                         type="submit">Register
                 </button>
             </form>
+            {# If user already have account then button to login #}
             <p class="text-sm pt-2 text-center sm:px-6 dark:text-gray-400">Already have an account?
                 <a rel="noopener noreferrer" href="{% url 'login' %}"
                    class="underline dark:text-gray-100">Login</a>
@@ -38,3 +40,5 @@
         </div>
     </div>
 {% endblock %}
+
+{# end of code I wrote #}

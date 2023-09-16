@@ -1,3 +1,5 @@
+{# I wrote this code #}
+{% load static %}
 <h3 class="text-2xl font-bold md:text-2xl md:leading-tight dark:text-white">Friend Suggestions</h3>
 {% for friend in friend_suggestions %}
 
@@ -24,30 +26,12 @@
     </div>
 {% endfor %}
 
+{# Global csrf_token variable to access from other javascript files #}
 <script>
-    function add_friend(button) {
-        const friend_id = button.getAttribute('data-friend-id')
-        axios.post('/friends/add-friend', {
-            friend_id: friend_id
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
-        })
-            .then(function (response) {
-                console.log(response);
-                button.innerHTML = 'Sent'
-                button.disabled = true
-            })
-            .catch(function (error) {
-                console.log(error);
-                if (error.response.data.request_sent_or_exist) {
-                    button.innerHTML = 'Already Exists'
-                    button.disabled = true
-                } else if (error.response.data.request_sent_or_exist === false) {
-                    button.parentElement.parentElement.remove()
-                }
-            });
-    }
+    var csrf_token = '{{ csrf_token }}';
 </script>
+{# Include JavaScript for friend functionality #}
+<script src="{% static 'js/friends.js' %}"></script>
+
+
+{# end of code I wrote #}

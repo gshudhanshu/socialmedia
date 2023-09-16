@@ -4,6 +4,11 @@ from channels.generic.websocket import WebsocketConsumer
 from .models import ChatRoom, ChatMessage
 
 
+#  I have taken the reference from
+#  https://testdriven.io/blog/django-channels/ tutorial
+# and modified it to suit my needs
+
+# I wrote this code
 class ChatConsumer(WebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
@@ -14,6 +19,7 @@ class ChatConsumer(WebsocketConsumer):
         self.user = None
         self.user_inbox = None
 
+    # connect to the websocket
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
@@ -21,22 +27,22 @@ class ChatConsumer(WebsocketConsumer):
         self.user = self.scope['user']
         self.user_inbox = f'inbox_{self.user.username}'
 
-        # connection has to be accepted
+        # connection is accepted
         self.accept()
 
-        # join the room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name,
         )
 
-        # send the user list to the newly joined user
+        # send newly joined user list to the room
         self.send(json.dumps({
             'type': 'user_list',
             'users': [user.username for user in self.room.online.all()],
         }))
 
         # send the chat history to the newly joined user
+        # Last 50 messages are sent
         history = ChatMessage.objects.filter(room_name=self.room).order_by('-created_at')[:50]
         history = reversed(history)
         self.send(json.dumps({
@@ -58,6 +64,7 @@ class ChatConsumer(WebsocketConsumer):
             )
             self.room.online.add(self.user)
 
+    # disconnect from the websocket
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
@@ -65,7 +72,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         if self.user.is_authenticated:
-            # delete the user inbox for private messages
+            # delete the user inbox
             async_to_sync(self.channel_layer.group_discard)(
                 self.user_inbox,
                 self.channel_name,
@@ -82,6 +89,7 @@ class ChatConsumer(WebsocketConsumer):
 
             self.room.online.remove(self.user)
 
+    # receive message from the websocket
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
@@ -99,6 +107,7 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
+        # save the message to the database
         ChatMessage.objects.create(user=self.user, room_name=self.room, message=message)
 
     def chat_message(self, event):
@@ -109,3 +118,5 @@ class ChatConsumer(WebsocketConsumer):
 
     def user_leave(self, event):
         self.send(text_data=json.dumps(event))
+
+# end of code I wrote

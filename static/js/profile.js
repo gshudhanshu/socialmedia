@@ -1,3 +1,5 @@
+// I wrote this code
+// Updating the profile status message
 function saveStatus(button) {
 //     get element by id "status-input" then get the value of the input
     const status_input = document.getElementById("status-input")
@@ -15,6 +17,7 @@ function saveStatus(button) {
 
         }
     })
+        // On successful response update the status and close the modal
         .then(function (response) {
             console.log(response);
             status_message.innerHTML = response.data.status_message
@@ -26,3 +29,5 @@ function saveStatus(button) {
         })
 
 }
+
+// end of code I wrote

@@ -1,3 +1,6 @@
+// I have taken the reference from
+// https://testdriven.io/blog/django-channels/ tutorial
+
 // submit if the user presses the enter key
 document.querySelector("#roomInput").onkeyup = function (e) {
     if (e.keyCode === 13) {  // enter key

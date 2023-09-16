@@ -5,6 +5,8 @@ from userprofile.models import UserProfile
 from .models import Post, Comment, Like
 
 
+# I wrote this code
+
 class PostSerializer(serializers.ModelSerializer):
     num_likes = serializers.IntegerField(read_only=True)
     num_comments = serializers.IntegerField(read_only=True)
@@ -46,8 +48,8 @@ class CommentSerializer(serializers.ModelSerializer):
             'profile_image': user_profile.profile_image.url,
         }
 
+    # Get the count of comments for the associated post
     def get_num_comments(self, obj):
-        # Get the count of comments for the associated post
         return Comment.objects.filter(post=obj.post).count()
 
 
@@ -76,3 +78,5 @@ class LikeAllUsersSerializer(LikeSerializer):
     class Meta:
         model = Like
         fields = '__all__'
+
+# I wrote this code

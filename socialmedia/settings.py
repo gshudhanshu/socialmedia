@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'post',
     'friends',
     'chat',
-    # 'notifications',
     'userprofile',
 
 ]
@@ -67,8 +66,6 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 
 ]
-
-# AUTH_USER_MODEL = 'authentication.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -113,6 +110,7 @@ DATABASES = {
     }
 }
 
+# Django Channels config
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -154,12 +152,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+# static files config
 STATIC_URL = 'static/'
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# media files config
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
@@ -176,5 +175,5 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-# Change this to your own npm.cmd path
+# This is the path to the npm executable, need to be changed as per the system
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"

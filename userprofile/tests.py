@@ -4,12 +4,14 @@ from django.urls import reverse
 from .factories import *
 
 
+# I wrote this code
 class UserProfileViewTestCase(APITestCase):
     def setUp(self):
         # Create test users with profiles
         self.user1 = UserFactory()
         self.user2 = UserFactory()
 
+    # test for list of profiles
     def test_list_profiles(self):
         url = reverse('api-profiles')
         response = self.client.get(url)
@@ -18,6 +20,7 @@ class UserProfileViewTestCase(APITestCase):
         self.assertEqual(response.data[0]['username'], self.user1.username)
         self.assertEqual(response.data[1]['username'], self.user2.username)
 
+    # test for single profile
     def test_view_profile(self):
         # Create a user profile using the factory
         user_profile = UserFactory()
@@ -30,8 +33,11 @@ class UserProfileViewTestCase(APITestCase):
         self.assertEqual(response.data['first_name'], user_profile.first_name)
         self.assertEqual(response.data['last_name'], user_profile.last_name)
 
+    # test for a non-existent user profile
     def test_view_profile_not_found(self):
         non_existent_user_id = 999999
         url = reverse('api-profile', kwargs={'user_id': non_existent_user_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+# end of code I wrote

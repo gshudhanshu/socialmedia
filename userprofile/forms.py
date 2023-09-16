@@ -6,8 +6,10 @@ from django.db.transaction import commit
 from django.contrib.auth.models import User
 
 
+# I wrote this code
+
+# Form to create a new user
 class CustomUserChangeForm(UserChangeForm):
-    # Fields you want to allow users to edit
     first_name = forms.CharField(max_length=30, required=True, help_text="Required. Enter your first name.")
     last_name = forms.CharField(max_length=30, required=True, help_text="Required. Enter your last name.")
     email = forms.EmailField(max_length=254, required=True, help_text="Required. Enter a valid email address.")
@@ -21,11 +23,12 @@ class CustomUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs['readonly'] = True  # Make the email field readonly
+        # Email is readonly and password is hidden
+        self.fields['email'].widget.attrs['readonly'] = True
         self.fields['password'].widget = forms.HiddenInput()
 
     def clean_email(self):
-        return self.initial['email']  # Ensure the email remains the same during editing
+        return self.initial['email']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -35,3 +38,5 @@ class CustomUserChangeForm(UserChangeForm):
         if commit:
             user.save()
         return user
+
+# end of code I wrote

@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-
 from userprofile.models import UserProfile
 
 
+# I wrote this code
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -13,9 +13,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 # REST API Serializer
 class UserProfileAPISerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer(read_only=True)
-
-    # date_of_birth = serializers.DateField(required=False)
-    # profile_image = serializers.ImageField(required=False)
 
     class Meta:
         model = User
@@ -41,3 +38,5 @@ class UserProfileAPISerializer(serializers.ModelSerializer):
     #         user_profile.save()
     #
     #     return user
+
+# end of code I wrote

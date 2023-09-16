@@ -1,3 +1,6 @@
+// I wrote this code
+
+// Add friend button click event
 function add_friend(button) {
     const friend_id = button.getAttribute('data-friend-id')
     axios.post('/friends/add-friend', {
@@ -8,11 +11,14 @@ function add_friend(button) {
             'X-CSRFToken': csrf_token
         }
     })
+        // On successfull response update the button text and disable it
         .then(function (response) {
             console.log(response);
             button.innerHTML = 'Sent'
             button.disabled = true
         })
+
+        // On error response log the error and update the button text and disable it
         .catch(function (error) {
             console.log(error);
             if (error.response.data.request_sent_or_exist) {
@@ -24,6 +30,7 @@ function add_friend(button) {
         });
 }
 
+// Accept, Decline, Cancel, Remove friend button click event
 function friend_request_accept_decline_cancel_remove(button) {
     const friend_id = button.getAttribute('data-friend-id')
     const data_request_type = button.getAttribute('data-request-type')
@@ -38,6 +45,7 @@ function friend_request_accept_decline_cancel_remove(button) {
             'X-CSRFToken': csrf_token
         }
     })
+        // On successful response update the button text and disable it
         .then(function (response) {
             console.log(response);
             if (data_request_type === 'accept') {
@@ -55,7 +63,10 @@ function friend_request_accept_decline_cancel_remove(button) {
             }
             button.disabled = true
         })
+        // On error log the error
         .catch(function (error) {
             console.log(error);
         })
 }
+
+// end of code I wrote

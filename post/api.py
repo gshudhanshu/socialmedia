@@ -1,13 +1,12 @@
 from django.db.models import Count, Exists, OuterRef
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, get_object_or_404, CreateAPIView
-from rest_framework.permissions import AllowAny
-
-from .models import *
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, CreateAPIView
 from .serializers import *
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
 
 
+# I wrote this code
+# API to list all posts of a user
 class ListUserPosts(ListCreateAPIView):
     serializer_class = PostSerializer
 
@@ -19,14 +18,14 @@ class ListUserPosts(ListCreateAPIView):
             user_liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=self.request.user)),
         ).select_related('user__userprofile')
 
-    # create function to create new post with anootate num_likes, num_comments, user_liked
+    # create new post with num_likes, num_comments, user_liked
     def create(self, request, *args, **kwargs):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             # Create the new post
             post = serializer.save(user=self.request.user)
 
-            # Annotate the num_likes, num_comments, and user_liked fields for the created post
+            # Annotate the num_likes, num_comments, and user_liked fields
             annotated_post = Post.objects.filter(pk=post.pk).annotate(
                 num_likes=Count('like', distinct=True),
                 num_comments=Count('comment', distinct=True),
@@ -37,9 +36,11 @@ class ListUserPosts(ListCreateAPIView):
             response_serializer = PostSerializer(annotated_post)
 
             return Response(response_serializer.data)
+        # If serializer is not valid, return the errors
         return Response(serializer.errors)
 
 
+# API to view a post with num_likes, num_comments, user_liked
 class ViewPost(RetrieveAPIView):
     serializer_class = PostSerializer
     lookup_url_kwarg = 'post_id'
@@ -51,7 +52,7 @@ class ViewPost(RetrieveAPIView):
             num_comments=Count('comment', distinct=True),
         ).select_related('user__userprofile')
 
-        # Check if the user is authenticated (not AnonymousUser)
+        # Check if the user is authenticated
         if not self.request.user.is_anonymous:
             queryset = queryset.annotate(
                 user_liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=self.request.user)),
@@ -65,6 +66,7 @@ class ViewPost(RetrieveAPIView):
         return Response(serializer.data)
 
 
+# Get list of post comments with user profile
 class ListPostComments(ListCreateAPIView):
     serializer_class = CommentAllUsersSerializer
 
@@ -74,6 +76,7 @@ class ListPostComments(ListCreateAPIView):
         return Comment.objects.filter(post_id=post_id).select_related('user__userprofile')
 
 
+#  Like or unlike a post
 class LikePost(CreateAPIView):
     serializer_class = LikeAllUsersSerializer
 
@@ -89,3 +92,5 @@ class LikePost(CreateAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({'post_id': post, "message": "Post liked", 'liked': True}, status=status.HTTP_200_OK)
+
+# end of code I wrote
