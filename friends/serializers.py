@@ -90,3 +90,10 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         else:
             return {'message': 'Friend request does not exist.',
                     'friend_removed': False, **self.data}
+
+
+#  REST API Views
+class ListFriendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = "__all__"

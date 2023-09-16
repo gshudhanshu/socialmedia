@@ -27,7 +27,7 @@
 <script>
     function add_friend(button) {
         const friend_id = button.getAttribute('data-friend-id')
-        axios.post('/api/friends/add-friend', {
+        axios.post('/friends/add-friend', {
             friend_id: friend_id
         }, {
             headers: {

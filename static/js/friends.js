@@ -1,6 +1,6 @@
 function add_friend(button) {
     const friend_id = button.getAttribute('data-friend-id')
-    axios.post('/api/friends/add-friend', {
+    axios.post('/friends/add-friend', {
         friend_id: friend_id
     }, {
         headers: {
@@ -28,7 +28,7 @@ function friend_request_accept_decline_cancel_remove(button) {
     const friend_id = button.getAttribute('data-friend-id')
     const data_request_type = button.getAttribute('data-request-type')
     const friend_link_id = button.getAttribute('data-friend-link-id')
-    axios.put('/api/friends/accept-decline-cancel-remove', {
+    axios.put('/friends/accept-decline-cancel-remove', {
         friend_id: friend_id,
         friend_link_id: friend_link_id,
         request_type: data_request_type
