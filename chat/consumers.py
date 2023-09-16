@@ -1,8 +1,6 @@
 import json
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-
 from .models import ChatRoom, ChatMessage
 
 
@@ -38,13 +36,18 @@ class ChatConsumer(WebsocketConsumer):
             'users': [user.username for user in self.room.online.all()],
         }))
 
-        if self.user.is_authenticated:
-            # create a user inbox for private messages
-            async_to_sync(self.channel_layer.group_add)(
-                self.user_inbox,
-                self.channel_name,
-            )
+        # send the chat history to the newly joined user
+        history = ChatMessage.objects.filter(room_name=self.room).order_by('-created_at')[:50]
+        history = reversed(history)
+        self.send(json.dumps({
+            'type': 'chat_history',
+            'messages': [{
+                'user': message.user.username,
+                'message': message.message,
+            } for message in history],
+        }))
 
+        if self.user.is_authenticated:
             # send the join event to the room
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -76,6 +79,7 @@ class ChatConsumer(WebsocketConsumer):
                     'user': self.user.username,
                 }
             )
+
             self.room.online.remove(self.user)
 
     def receive(self, text_data=None, bytes_data=None):
@@ -94,7 +98,8 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message,
             }
         )
-        ChatMessage.objects.create(user=self.user, room=self.room, content=message)
+
+        ChatMessage.objects.create(user=self.user, room_name=self.room, message=message)
 
     def chat_message(self, event):
         self.send(text_data=json.dumps(event))

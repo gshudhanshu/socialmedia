@@ -1,7 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import OuterRef, Count, Exists, Prefetch
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny
@@ -11,6 +13,7 @@ from . import serializers
 
 from friends.models import Friend
 from post.models import Like, Post, Comment
+from .forms import CustomUserChangeForm
 from .models import UserProfile
 
 
@@ -87,9 +90,26 @@ class ProfileView(ListView):
         return context
 
 
-class EditProfileView(ListView):
+class UserProfileEditView(LoginRequiredMixin, UpdateView):
+    model = User
     template_name = 'profile/edit-profile.html'
-    context_object_name = 'profile'
+    form_class = CustomUserChangeForm
+    success_url = reverse_lazy('user-profile-detail')  # Redirect to the profile page upon successful update
+
+    def get_object(self, queryset=None):
+        # Return the user's profile, which includes date_of_birth and profile_image
+        return User.objects.filter(id=self.request.user.id).select_related('userprofile').first()
+
+    def get_form(self, form_class=None):
+        # Get the form and set the initial values for date_of_birth and profile_image
+        form = super().get_form(form_class)
+        form.fields['date_of_birth'].initial = self.request.user.userprofile.date_of_birth
+        form.fields['profile_image'].initial = self.request.user.userprofile.profile_image
+        return form
+
+    def form_valid(self, form):
+        # You can add additional logic here if needed
+        return super().form_valid(form)
 
 
 class UpdateStatusAPI(UpdateAPIView):

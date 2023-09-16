@@ -30,7 +30,7 @@ function axiosPostRequest(post_Id, comment_text, commentInput, formContainer) {
                             class="object-cover object-center w-4 h-4 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                         <div class="-space-y-1">
                             <div class="-space-y-1">
-                                <span class="text-sm font-semibold leadi">
+                                <span class=" font-semibold leadi">
                                     ${response.data.user_details.username}
                                 </span>
                                 <span class="inline-block text-xs leadi dark:text-gray-400">

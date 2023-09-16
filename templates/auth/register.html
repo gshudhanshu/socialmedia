@@ -19,7 +19,7 @@
             <form method="post" action="{% url 'register' %}" class="space-y-6" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in form %}
-                    <div class="space-y-1 text-sm">
+                    <div class="space-y-1">
                         {% with field.label_tag as label %}
                             <label for="{{ field.auto_id }}" class="block dark:text-gray-400">{{ label }}</label>
                         {% endwith %}

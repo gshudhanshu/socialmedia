@@ -8,7 +8,6 @@ from django.db import models
 class ChatRoom(models.Model):
     name = models.CharField(max_length=100)
     online = models.ManyToManyField(User, blank=True)
-    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_online_count(self):
