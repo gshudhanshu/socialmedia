@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from chat.models import ChatRoom
 
 
 # I wrote this code
 
-class ChatView(ListView):
+class ChatView(LoginRequiredMixin, ListView):
     template_name = 'chat/chat.html'
     context_object_name = 'rooms'
 
@@ -12,7 +13,7 @@ class ChatView(ListView):
         return ChatRoom.objects.all()
 
 
-class ChatRoomView(ListView):
+class ChatRoomView(LoginRequiredMixin, ListView):
     template_name = 'chat/room.html'
 
     def get_queryset(self):

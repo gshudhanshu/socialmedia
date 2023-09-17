@@ -18,7 +18,7 @@ from .models import UserProfile
 
 # I wrote this code
 # API for getting the user profile of the authenticated user
-class ProfileView(ListView):
+class ProfileView(LoginRequiredMixin, ListView):
     template_name = 'profile/profile.html'
     context_object_name = 'friend_profile'
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import F, Q
 from django.views.generic import ListView
@@ -34,7 +35,7 @@ class AddFriendAPI(ListCreateAPIView):
 
 
 # List all friends of a user
-class ListFriends(ListView):
+class ListFriends(LoginRequiredMixin, ListView):
     model = Friend
     template_name = 'friends/friends.html'
     context_object_name = 'friends'
