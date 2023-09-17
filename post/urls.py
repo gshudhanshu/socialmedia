@@ -4,7 +4,9 @@ from . import api
 
 urlpatterns = [
     path('', views.ListPosts.as_view(), name='home'),
-    path('post/create', views.CreatePostAPI.as_view(), name='createpost'),
+
+    path('post/create', views.CreatePost.as_view(), name='createpost'),
+    # path('post/create', views.CreatePostAPI.as_view(), name='createpost'),
     path('comment/create', views.CreateCommentAPI.as_view(), name='createcomment'),
     path('comments/<int:post_id>', views.ListCommentsAPI.as_view(), name='listcomments'),
     path('like/<int:post_id>', views.LikePostAPI.as_view(), name='like'),

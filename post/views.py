@@ -1,6 +1,10 @@
 from random import sample
 from django.contrib.auth.models import User
 from django.db.models import Count, Prefetch, OuterRef, Exists
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.views import View
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -48,7 +52,7 @@ class ListPosts(LoginRequiredMixin, ListView):
             num_likes=Count('like', distinct=True),
             num_comments=Count('comment', distinct=True),
             user_liked=Exists(user_has_liked),
-        )
+        ).order_by('-created_at')
         # Fetch comments and order them by creation date (desc)
         comment_prefetch = Prefetch('comment_set',
                                     queryset=Comment.objects.order_by('-created_at'))
@@ -61,6 +65,16 @@ class ListPosts(LoginRequiredMixin, ListView):
         context['user'] = self.request.user
         context['friend_suggestions'] = self.get_friend_suggestions()
         return context
+
+
+# Create a post
+class CreatePost(LoginRequiredMixin, View):
+    def post(self, request):
+        user = request.user
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        post = Post.objects.create(user=user, content=content, image=image)
+        return HttpResponseRedirect(reverse('home'))
 
 
 # Create a post

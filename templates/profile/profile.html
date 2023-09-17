@@ -164,6 +164,9 @@
                                             <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}</span>
                                         </div>
                                     </div>
+                                    <div title="Open options" type="button">
+                                        <p class="dark:text-gray-400 text-sm">{{ post.created_at }}</p>
+                                    </div>
 
                                 </div>
                                 <img src="/media/{{ post.image }}" alt=""

@@ -43,7 +43,7 @@ class ProfileView(ListView):
             num_likes=Count('like', distinct=True),
             num_comments=Count('comment', distinct=True),
             user_liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=self.request.user)),
-        ).select_related('user__userprofile')
+        ).select_related('user__userprofile').order_by('-created_at')
         # fetch comments and order them by creation date (desc)
         comment_prefetch = Prefetch('comment_set', queryset=Comment.objects.order_by('-created_at'))
         user_posts = user_posts.prefetch_related(comment_prefetch)
