@@ -4,10 +4,10 @@ services:
   web:
     build: .
     ports:
-      - '8000:8000'
+      - '6000:6000'
     depends_on:
       - redis
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:6000
     volumes:
       - .:/code
 
