@@ -12,10 +12,11 @@ class ListUserPosts(ListCreateAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
+        user = User.objects.filter(id=user_id).first()
         return Post.objects.filter(user_id=user_id).annotate(
             num_likes=Count('like', distinct=True),
             num_comments=Count('comment', distinct=True),
-            user_liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=self.request.user)),
+            user_liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=user)),
         ).select_related('user__userprofile')
 
     # create new post with num_likes, num_comments, user_liked
