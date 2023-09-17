@@ -32,10 +32,14 @@ class CustomUserChangeForm(UserChangeForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.date_of_birth = self.cleaned_data.get('date_of_birth')
-        user.profile_image = self.cleaned_data.get('profile_image')
+
+        # user.date_of_birth = self.cleaned_data.get('date_of_birth')
+        # user.profile_image = self.cleaned_data.get('profile_image')
+        user.userprofile.date_of_birth = self.cleaned_data.get('date_of_birth')
+        user.userprofile.profile_image = self.cleaned_data.get('profile_image')
 
         if commit:
+            user.userprofile.save()
             user.save()
         return user
 

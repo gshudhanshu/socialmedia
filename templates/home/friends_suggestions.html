@@ -4,7 +4,7 @@
 {% for friend in friend_suggestions %}
 
     <div class="grid-rows-1 text-center lg:flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
-        <img class="rounded-lg max-w-[10rem] lg:w-24 lg:h-24 object-cover"
+        <img class="rounded-lg w-24 h-24 object-cover aspect-[1]"
              src="/media/{{ friend.userprofile.profile_image }}"
              alt=" Image Description">
 

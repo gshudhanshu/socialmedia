@@ -39,7 +39,6 @@ class CustomUserCreationForm(UserCreationForm):
         user = super().save(commit=False)
         user.date_of_birth = self.cleaned_data.get('date_of_birth')
         user.profile_image = self.files.get('profile_image')
-
         if commit:
             user.save()
         return user

@@ -10,12 +10,15 @@
                 <div class="grid gap-2">
                     <label for="roomInput" class="font-bold uppercase">Enter room name to connect the chat</label>
                     {# Input field for entering the room name #}
-                    <input
-                            class="py-3 px-4 block w-full border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:bg-white dark:border-gray-700 dark:text-gray-400"
-                            rows="15" placeholder="Room name"
-                            id="roomInput"></input>
-                    <small id="roomInputHelp" class="form-text text-muted">If room doesn't exists it will create new
-                        room.</small>
+                    <input onkeydown="return /[a-zA-Z0-9_]/i.test(event.key)"
+                           class="py-3 px-4 block w-full border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:bg-white dark:border-gray-700 dark:text-gray-400"
+                           rows="15" placeholder="Room name"
+                           id="roomInput"></input>
+                    <small id="roomInputHelp" class="form-text text-muted text-red-400">Only A-Z, a-z and underscore
+                        characters are
+                        allowed.</small>
+                    <small id="roomInputHelp" class="form-text text-muted">
+                        If room doesn't exists it will create new room.</small>
                     {# Button to connect to the room #}
                     <button type="button" id="roomConnect"
                             class="py-3 px-4 max-w-[9rem] rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">

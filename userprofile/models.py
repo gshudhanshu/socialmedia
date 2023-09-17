@@ -20,25 +20,35 @@ class UserProfile(models.Model):
 
 
 # signal to create a UserProfile when a User is created
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         if (hasattr(instance, 'date_of_birth') and
+#                 hasattr(instance, 'profile_image')):
+#             UserProfile.objects.create(user=instance,
+#                                        date_of_birth=instance.date_of_birth,
+#                                        profile_image=instance.profile_image)
+#         else:
+#             UserProfile.objects.create(user=instance)
+
+# signal to create and update a UserProfile when a User is created or updated
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        if (hasattr(instance, 'date_of_birth') and
-                hasattr(instance, 'profile_image')):
-            UserProfile.objects.create(user=instance,
-                                       date_of_birth=instance.date_of_birth,
-                                       profile_image=instance.profile_image)
-        else:
-            UserProfile.objects.create(user=instance)
-
-
-# signal to save the UserProfile when the User is saved
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if (hasattr(instance, 'date_of_birth') and
-            hasattr(instance, 'profile_image')):
+        UserProfile.objects.create(user=instance)
+        # if (hasattr(instance, 'date_of_birth') and
+        #         hasattr(instance, 'profile_image')):
         instance.userprofile.date_of_birth = instance.date_of_birth
         instance.userprofile.profile_image = instance.profile_image
         instance.userprofile.save()
+
+# signal to save the UserProfile when the User is saved
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     if (hasattr(instance, 'date_of_birth') and
+#             hasattr(instance, 'profile_image')):
+#         instance.userprofile.date_of_birth = instance.date_of_birth
+#         instance.userprofile.profile_image = instance.profile_image
+#         instance.userprofile.save()
 
 # end of code I wrote

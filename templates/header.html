@@ -92,7 +92,7 @@
                         <button id="hs-dropdown-basic" type="button"
                                 class="hs-dropdown-toggle pr-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                             {% if user.username %}
-                                <img class="h-[3.375rem] rounded-md aspect-[1]"
+                                <img class="w-[3.375rem] h-[3.375rem] object-cover rounded-md aspect-[1]"
                                      src="/media/{{ user.userprofile.profile_image }}"
                                      alt="">
                                 <span class="text-gray-600 font-medium truncate max-w-[9rem] dark:text-gray-400">{{ user.username }}</span>
