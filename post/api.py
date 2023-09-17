@@ -77,8 +77,13 @@ class ListPostComments(ListCreateAPIView):
 
 
 #  Like or unlike a post
-class LikePost(CreateAPIView):
+class ListLikePost(ListCreateAPIView):
     serializer_class = LikeAllUsersSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        post_id = self.kwargs['post_id']
+        return Like.objects.filter(post_id=post_id).select_related('user__userprofile')
 
     def create(self, request, *args, **kwargs):
         user = self.request.data.get('user')

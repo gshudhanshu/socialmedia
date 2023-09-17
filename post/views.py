@@ -2,7 +2,7 @@ from random import sample
 from django.contrib.auth.models import User
 from django.db.models import Count, Prefetch, OuterRef, Exists
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
 from rest_framework import status
@@ -71,9 +71,10 @@ class ListPosts(LoginRequiredMixin, ListView):
 class CreatePost(LoginRequiredMixin, View):
     def post(self, request):
         user = request.user
+        title = request.POST.get('title')
         content = request.POST.get('content')
         image = request.FILES.get('image')
-        post = Post.objects.create(user=user, content=content, image=image)
+        post = Post.objects.create(user=user, title=title, content=content, image=image)
         return HttpResponseRedirect(reverse('home'))
 
 
@@ -174,4 +175,4 @@ class LikePostAPI(CreateAPIView):
             return Response({"error": "User must be authenticated to like a post"},
                             status=status.HTTP_403_FORBIDDEN)
 
-# I wrote this code
+# end of code I wrote

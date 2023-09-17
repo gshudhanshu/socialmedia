@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -28,6 +29,10 @@ urlpatterns = [
     path('', include('friends.urls')),
     path('', include('userprofile.urls')),
     path('', include('chat.urls')),
+
+    # REST-API LINKS PAGE
+    path('rest-apis', views.RestApiLinks.as_view(), name='rest-apis-links'),
+
 ]
 
 # I wrote this code

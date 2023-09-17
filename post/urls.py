@@ -15,5 +15,5 @@ urlpatterns = [
     path('api/user-posts/<int:user_id>', api.ListUserPosts.as_view(), name='api-user-posts'),
     path('api/posts/<int:post_id>', api.ViewPost.as_view(), name='api-post'),
     path('api/posts/<int:post_id>/comments', api.ListPostComments.as_view(), name='api-post-comments'),
-    path('api/posts/<int:post_id>/like', api.LikePost.as_view(), name='api-like-post'),
+    path('api/posts/<int:post_id>/like', api.ListLikePost.as_view(), name='api-like-post'),
 ]
