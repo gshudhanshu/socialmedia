@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-cm9isu!7&klyb659!9vnn)f-wrhef1k!^3$ik(g_64#*c&owq=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    ".sgcreative.pro",
+    "0.0.0.0",
+    "localhost",
+    "127.0.0.1",
+    ".coursera-apps.org",
+    ".coursera.org",
+]
 
 # Application definition
 
