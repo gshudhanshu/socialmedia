@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 
 # I wrote this code
+# Form for the User model creation
 class CustomUserCreationForm(UserCreationForm):
     # Additional fields for the User model
     first_name = forms.CharField(max_length=30, required=True, help_text="Required. Enter your first name.")
@@ -42,4 +43,5 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
 # end of code I wrote

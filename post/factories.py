@@ -5,6 +5,7 @@ from authentication.factories import UserFactory
 
 
 # I wrote this code
+
 class PostFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Post

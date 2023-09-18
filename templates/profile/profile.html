@@ -160,7 +160,9 @@
                                         <img src="/media/{{ post.user.userprofile.profile_image }}" alt=""
                                              class="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                                         <div class="-space-y-1">
-                                            <h2 class="font-semibold leadi">{{ post.user }}</h2>
+                                            <h2 class="font-semibold leadi"><a
+                                                    href="{% url 'friend-profile-detail' post.user.id %}">{{ post.user }}</a>
+                                            </h2>
                                             <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}</span>
                                         </div>
                                     </div>
@@ -259,26 +261,53 @@
                  aria-labelledby="bar-with-underline-item-2">
                 {% for friend in friends %}
                     <div class="text-left flex dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+
                         <img class="rounded-lg w-24 h-24 object-cover"
+                                {% if friend.user_sent_request == false %}
                              src="/media/{{ friend.friend.userprofile.profile_image }}"
+                                {% else %}
+                             src="/media/{{ friend.user.userprofile.profile_image }}"
+                                {% endif %}
                              alt=" Image Description">
                         <div class="flex-col flex sm:h-full px-4 gap-3 py-2 ">
                             <h3 class="font-medium text-gray-800 dark:text-gray-200">
-                                {{ friend.friend.first_name }} {{ friend.friend.last_name }}
+                                {% if friend.user_sent_request == false %}
+                                    {{ friend.friend.first_name }} {{ friend.friend.last_name }}
+                                {% else %}
+                                    {{ friend.user.first_name }} {{ friend.user.last_name }}
+                                {% endif %}
                             </h3>
                             <div class="flex gap-2">
-                                <a type="button" href="{% url 'friend-profile-detail' friend.friend.id %}"
-                                   data-friend-id="{{ friend.friend.id }}" data-friend-link-id="{{ friend.id }}"
-                                   class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
-                                    Profile
-                                </a>
-                                <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
-                                        data-friend-id="{{ friend.friend.id }}"
-                                        data-friend-link-id="{{ friend.id }}"
-                                        data-request-type="remove"
-                                        class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
-                                    Remove Friend
-                                </button>
+                                {% if friend.user_sent_request == false %}
+                                    <a type="button" href="{% url 'friend-profile-detail' friend.user.id %}"
+                                       data-friend-id="{{ friend.friend.id }}" data-friend-link-id="{{ friend.id }}"
+                                       class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                        Profile
+                                    </a>
+                                    <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                            data-friend-id="{{ friend.user.id }}"
+                                            data-friend-link-id="{{ friend.id }}"
+                                            data-request-type="remove"
+                                            class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                        Remove Friend
+                                    </button>
+
+                                {% else %}
+                                    <a type="button" href="{% url 'friend-profile-detail' friend.friend.id %}"
+                                       data-friend-id="{{ friend.friend.id }}" data-friend-link-id="{{ friend.id }}"
+                                       class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                        Profile
+                                    </a>
+                                    <button type="button" onclick="friend_request_accept_decline_cancel_remove(this)"
+                                            data-friend-id="{{ friend.friend.id }}"
+                                            data-friend-link-id="{{ friend.id }}"
+                                            data-request-type="remove"
+                                            class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-sm border border-transparent font-semibold bg-violet-400 dark:text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                                        Remove Friend
+                                    </button>
+                                {% endif %}
+
+
                             </div>
                         </div>
                     </div>

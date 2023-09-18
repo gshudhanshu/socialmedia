@@ -5,6 +5,7 @@ from .factories import *
 
 
 # I wrote this code
+# Test cases for Post API
 class PostViewTestCase(APITestCase):
     def setUp(self):
         # Create test users

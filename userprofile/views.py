@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import OuterRef, Count, Exists, Prefetch
+from django.db.models import OuterRef, Count, Exists, Prefetch, When, Case, Value, BooleanField
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from rest_framework import status
@@ -53,11 +53,14 @@ class ProfileView(LoginRequiredMixin, ListView):
     def get_friends(self):
         user_id = self.kwargs.get('user_id') or self.request.user.id
 
-        friends = Friend.objects.filter(user_id=user_id, accepted=True).select_related(
-            'friend__userprofile')
-        friends = friends | Friend.objects.filter(friend_id=user_id, accepted=True).select_related(
-            'user__userprofile')
-        return friends
+        friends_1 = Friend.objects.filter(user_id=user_id, accepted=True).select_related(
+            'friend__userprofile').annotate(user_sent_request=Value(True, output_field=BooleanField()))
+        friends_2 = Friend.objects.filter(friend_id=user_id, accepted=True).select_related(
+            'user__userprofile').annotate(user_sent_request=Value(False, output_field=BooleanField()))
+
+        combined_friends = friends_2.union(friends_1, all=True)
+
+        return combined_friends
 
     # get relationship between authenticated user and user in url
     def get_relationship(self):

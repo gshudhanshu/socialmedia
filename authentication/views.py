@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 
 
 # I wrote this code
+# Register view for new users to register accounts
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
@@ -24,6 +25,7 @@ def register_view(request):
                   {'form': form, 'errors': errors})
 
 
+# Login view for users to login to their accounts
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -41,8 +43,10 @@ def login_view(request):
                   {'form': form, 'errors': errors})
 
 
+# Logout view for users to logout of their accounts and redirect to the login page
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
     return redirect('login')
+
 # end of code I wrote

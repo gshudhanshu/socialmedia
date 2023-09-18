@@ -7,6 +7,7 @@ from .models import Post, Comment, Like
 
 # I wrote this code
 
+# Serializer for the Post model
 class PostSerializer(serializers.ModelSerializer):
     num_likes = serializers.IntegerField(read_only=True)
     num_comments = serializers.IntegerField(read_only=True)
@@ -17,18 +18,21 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# Serializer for the create post
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
 
 
+# Serializer for the user model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name')
 
 
+# Serializer for the comment model
 class CommentSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()
     user_details = UserSerializer(source='user', read_only=True)
@@ -53,6 +57,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return Comment.objects.filter(post=obj.post).count()
 
 
+# Serializer for the like model
 class LikeSerializer(serializers.ModelSerializer):
     user_details = UserSerializer(source='user', read_only=True)
 
@@ -63,7 +68,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 # REST API
-
+# Serializer for comment model for all users
 class CommentAllUsersSerializer(CommentSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -72,6 +77,7 @@ class CommentAllUsersSerializer(CommentSerializer):
         fields = '__all__'
 
 
+# Serializer for like model for all users
 class LikeAllUsersSerializer(LikeSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 

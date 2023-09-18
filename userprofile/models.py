@@ -36,10 +36,10 @@ class UserProfile(models.Model):
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-        # if (hasattr(instance, 'date_of_birth') and
-        #         hasattr(instance, 'profile_image')):
-        instance.userprofile.date_of_birth = instance.date_of_birth
-        instance.userprofile.profile_image = instance.profile_image
+        if (hasattr(instance, 'date_of_birth') and
+                hasattr(instance, 'profile_image')):
+            instance.userprofile.date_of_birth = instance.date_of_birth
+            instance.userprofile.profile_image = instance.profile_image
         instance.userprofile.save()
 
 # signal to save the UserProfile when the User is saved

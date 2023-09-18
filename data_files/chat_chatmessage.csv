@@ -1,0 +1,6 @@
+id,message,created_at,user_id,room_name_id
+3,Hi there!,2023-09-17 20:05:54.231182,4,5
+4,This AWD Django group,2023-09-18 01:27:09.795939,3,6
+5,Hi There!,2023-09-18 01:27:58.986027,8,6
+6,This is so cool!,2023-09-18 01:28:05.347495,8,6
+8,@lizaditaq How are you guys?,2023-09-18 01:34:33.434289,9,6

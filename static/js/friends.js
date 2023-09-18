@@ -11,7 +11,7 @@ function add_friend(button) {
             'X-CSRFToken': csrf_token
         }
     })
-        // On successfull response update the button text and disable it
+        // On successful response update the button text and disable it
         .then(function (response) {
             console.log(response);
             button.innerHTML = 'Sent'

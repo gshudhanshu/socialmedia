@@ -33,7 +33,8 @@
                             <img src="/media/{{ post.user.userprofile.profile_image }}" alt=""
                                  class="object-cover object-center w-8 h-8 rounded-full shadow-sm dark:bg-gray-500 dark:border-gray-700">
                             <div class="-space-y-1">
-                                <h2 class="font-semibold leadi">{{ post.user }}</h2>
+                                <h2 class="font-semibold leadi"><a
+                                        href="{% url 'friend-profile-detail' post.user.id %}">{{ post.user }}</a></h2>
                                 <span class="inline-block text-xs leadi dark:text-gray-400">    {{ post.user.first_name|default:'' }} {{ post.user.last_name|default:'' }}</span>
                             </div>
                         </div>

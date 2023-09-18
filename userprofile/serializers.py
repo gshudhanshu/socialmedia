@@ -4,6 +4,7 @@ from userprofile.models import UserProfile
 
 
 # I wrote this code
+# Serializer for the user profile model
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -11,6 +12,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 # REST API Serializer
+# Serializer for the user profile model API
 class UserProfileAPISerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer(read_only=True)
 

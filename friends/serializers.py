@@ -4,6 +4,7 @@ from .models import Friend
 
 
 # I wrote this code
+# Serializer for the Friend model
 class FriendRequestSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
     friend = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())

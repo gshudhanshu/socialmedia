@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "rest_framework",
 
+    'socialmedia',
+
     # Tailwind required apps
     'tailwind',
     'theme',

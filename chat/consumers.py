@@ -9,6 +9,7 @@ from .models import ChatRoom, ChatMessage
 # and modified it to suit my needs
 
 # I wrote this code
+# Chat consumer to handle websocket connections
 class ChatConsumer(WebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
