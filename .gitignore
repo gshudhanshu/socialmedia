@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# Django
+staticfiles/
+*.log
+
+# Tailwind build tooling
+theme/static_src/node_modules/
+
+# IDE / editor settings
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
